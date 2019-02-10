@@ -1,0 +1,75 @@
+.input-container {
+  width: 100%;
+  height: 15vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.input-container mat-form-field {
+  width: 30%;
+}
+
+.list-of-films {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.film-description-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 70%;
+  height: 20vh;
+}
+
+.film-img {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.film-img img {
+  height: 35vh;
+  width: 70%;
+}
+
+.film-info-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 50%;
+  height: 45vh;
+  background-color: gainsboro;
+  border: 2px solid darkgrey;
+}
+
+.film-title {
+  font-size: 25px;
+}
+
+.film-title-container {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  height: 30%;
+}
+
+.film-description{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 70%;
+}
+
+.film-description-type-text-container {
+  width: 100%;
+  height: 20%;
+  text-align: center;
+}

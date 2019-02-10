@@ -1,0 +1,35 @@
+<div *ngIf="films.length">
+  <div *ngFor="let item of films" class="list-of-films">
+    <div class="film-info-container" (click)="getInfoDetails(item.imdbID)">
+      <div class="film-img">
+        <img [src]="item.Poster.includes('http') ? item.Poster : 'https://cdn.iconscout.com/icon/premium/png-256-thumb/movie-464-815948.png'">
+      </div>
+      <div class="film-description-container">
+        <div class="film-title-container">
+          <span class="film-title">{{item.Title}}</span>
+          <span style="text-align: center; color: green">Already in favourites</span>
+        </div>
+        <div class="film-description">
+          <div class="film-description-type-text-container">
+            <span class="film-description-type-text">{{item.Type}}</span>
+          </div>
+          <div>
+            <span class="film-description-type-text">{{item.Year}}</span>
+          </div>
+          <button
+            mat-button
+            (click)="deleteFromFavourites(item); $event.stopPropagation();"
+            class="func-button"
+            color="warn"
+          >Delete from favourites</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div *ngIf="!films.length" class="no-films-message-container">
+  <div class="message-container">
+    <h3>No films added to your favourite list</h3>
+  </div>
+</div>
+

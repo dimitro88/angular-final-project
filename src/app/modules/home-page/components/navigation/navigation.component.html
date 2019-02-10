@@ -1,0 +1,14 @@
+<mat-toolbar color="primary" class="toolbar">
+  <div class="nav">
+    <a mat-raised-button routerLink="/home/films">Films<mat-icon>movie</mat-icon></a>
+    <a mat-raised-button routerLink="/home/map">Map<mat-icon>place</mat-icon></a>
+    <a mat-raised-button routerLink="/home/postcodes">Postcodes<mat-icon>local_post_office</mat-icon></a>
+  </div>
+  <div class="favourites-films-link">
+    <a mat-raised-button routerLink="/home/favourite-films">Favourite films<mat-icon>stars</mat-icon></a>
+  </div>
+  <div class="log-out">
+    <a mat-raised-button color="warn" (click)="logOut()">Log out</a>
+  </div>
+</mat-toolbar>
+

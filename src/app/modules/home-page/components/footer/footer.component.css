@@ -1,0 +1,46 @@
+.footer {
+  position: fixed;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  height: 10vh;
+  overflow:hidden;
+}
+
+.container {
+  display: flex;
+  width: 65%;
+  align-items: center;
+}
+
+.github-button {
+  width: 40%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  height: 100%;
+}
+
+.mat-button {
+  width: 30%;
+  height: 30%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.footer-author-text-container {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  width: 60%;
+  height: 50%;
+}
+
+.footer-author-text{
+  font-size: 18px;
+}

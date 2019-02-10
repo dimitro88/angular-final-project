@@ -1,0 +1,7 @@
+.main-content {
+  position: absolute;
+  overflow: auto;
+  width: 100%;
+  top: 10vh;
+  bottom: 10vh;
+}

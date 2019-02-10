@@ -1,0 +1,91 @@
+<div class="login-container">
+  <mat-card>
+    <form [formGroup]="userForm" class="form-container">
+      <div class="title">
+        <h4>Registration</h4>
+      </div>
+      <div class="field-wrap-container">
+        <mat-form-field>
+          <input
+            type="text"
+            matInput
+            placeholder="Enter your login"
+            formControlName="login"
+            autocomplete="off"
+          >
+          <mat-icon matSuffix class="icon">account_circle</mat-icon>
+          <mat-error *ngIf="userForm.get('login').invalid">{{getErrorMessage('login')}}</mat-error>
+        </mat-form-field>
+      </div>
+      <div class="field-wrap-container">
+        <mat-form-field>
+          <input
+            type="text"
+            matInput
+            placeholder="Enter your first name"
+            formControlName="firstName"
+            autocomplete="off"
+          >
+          <mat-icon matSuffix class="icon">perm_identity</mat-icon>
+          <mat-error *ngIf="userForm.get('firstName').invalid">{{getErrorMessage('firstName')}}</mat-error>
+        </mat-form-field>
+      </div>
+      <div class="field-wrap-container">
+        <mat-form-field>
+          <input
+            type="text"
+            matInput
+            placeholder="Enter your last name"
+            formControlName="lastName"
+            autocomplete="off"
+          >
+          <mat-icon matSuffix class="icon">perm_identity</mat-icon>
+          <mat-error *ngIf="userForm.get('lastName').invalid">{{getErrorMessage('lastName')}}</mat-error>
+        </mat-form-field>
+      </div>
+      <div class="field-wrap-container">
+        <mat-form-field>
+          <input
+            type="text"
+            matInput
+            placeholder="Enter your email"
+            formControlName="email"
+            autocomplete="off"
+          >
+          <mat-icon matSuffix class="icon">email</mat-icon>
+          <mat-error *ngIf="userForm.get('email').invalid">{{getErrorMessage('email')}}</mat-error>
+        </mat-form-field>
+      </div>
+      <div class="field-wrap-container">
+        <mat-form-field>
+          <input
+            matInput
+            placeholder="Enter your password"
+            [type]="hidePassword ? 'password' : 'text'"
+            formControlName="password"
+          >
+          <mat-icon matSuffix (click)="hidePassword = !hidePassword">{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+          <mat-error *ngIf="userForm.get('password').invalid">{{getErrorMessage('password')}}</mat-error>
+        </mat-form-field>
+      </div>
+      <div class="field-wrap-container">
+        <mat-form-field>
+          <input
+            [type]="hideConfirmPassword ? 'password' : 'text'"
+            matInput
+            placeholder="Confirm your password"
+            formControlName="confirmPassword"
+            autocomplete="off"
+          >
+          <mat-icon matSuffix (click)="hideConfirmPassword = !hideConfirmPassword">{{hideConfirmPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+          <mat-error *ngIf="userForm.get('confirmPassword').invalid">{{getErrorMessage('confirmPassword')}}</mat-error>
+        </mat-form-field>
+      </div>
+      <div class="buttons-container">
+        <a mat-raised-button color="primary" (click)="submitForm()" [disabled]="!userForm.valid">Register</a>
+        <a mat-raised-button color="primary" routerLink="/login">To login</a>
+      </div>
+    </form>
+  </mat-card>
+  <notifier-container></notifier-container>
+</div>
