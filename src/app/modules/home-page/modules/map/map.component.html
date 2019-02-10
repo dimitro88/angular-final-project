@@ -1,3 +1,24 @@
 <div class="map-container">
   <div #gmap class="map"></div>
+  <div class="input-container">
+    <mat-form-field>
+      <input
+        type="text"
+        matInput
+        placeholder="Enter address"
+        [formControl]="search"
+        autocomplete="off"
+        #activeInput
+      >
+      <mat-icon matSuffix class="icon">search</mat-icon>
+    </mat-form-field>
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="myLocation()"
+      class="my-location-button"
+    >
+      <mat-icon matSuffix class="icon">gps_fixed</mat-icon>
+    </button>
+  </div>
 </div>

@@ -1,6 +1,6 @@
 .map-container {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
   width: 100%;
@@ -8,6 +8,25 @@
 }
 
 .map {
-  width: 50%;
-  height: 40vh;
+  z-index: 0;
+  width: 70%;
+  height: 100%;
+}
+
+.input-container {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-around;
+  width: 30%;
+  height: 90%;
+}
+
+.input-container mat-form-field {
+  width: 70%;
+}
+
+.my-location-button {
+  width: 5%;
+  height: 7vh;
+  z-index: 999;
 }

@@ -25,5 +25,4 @@ export class FilmService {
     this.filmsStore$.push(film);
     localStorage.setItem('favouritesFilms', JSON.stringify(this.filmsStore$));
   }
-
 }
