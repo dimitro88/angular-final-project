@@ -5,6 +5,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  background-image: url("http://elitefon.ru/images/201504/elitefon.ru_39019.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 
 mat-card {

@@ -10,7 +10,10 @@ import { Router } from '@angular/router';
 export class FavouriteFilmsComponent implements OnInit {
   public films;
 
-  constructor(private _films: FilmService, private router: Router) { }
+  constructor(
+    private _films: FilmService,
+    private router: Router
+  ) { }
 
   ngOnInit() {
     this.films = this._films.getListOfFilms();

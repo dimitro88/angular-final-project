@@ -1,6 +1,7 @@
+/// <reference path="../../../../../../node_modules/@types/googlemaps/index.d.ts"/>
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { } from '@types/googlemaps';
+declare let google: any;
 
 @Component({
   selector: 'app-map',
@@ -8,23 +9,26 @@ import { } from '@types/googlemaps';
   styleUrls: ['./map.component.css']
 })
 export class MapComponent implements OnInit, AfterViewInit {
+
+  map: google.maps.Map;
+
   @ViewChild('gmap') gmapElement: any;
   @ViewChild('activeInput') activeInput: any;
-  public search = new FormControl('');
-  map: google.maps.Map;
+
   private coordinates = {
     latitude: 0,
     longitude: 0
   };
 
+  public search = new FormControl('');
+
   constructor() { }
 
   ngOnInit() {
-    console.log(window.navigator.geolocation);
     if (window.navigator.geolocation) {
-      window.navigator.geolocation.getCurrentPosition(position => {
-        this.coordinates.latitude = position.coords.latitude;
-        this.coordinates.longitude = position.coords.longitude;
+      window.navigator.geolocation.getCurrentPosition(({ coords : { latitude, longitude }}) => {
+        this.coordinates.latitude = latitude;
+        this.coordinates.longitude = longitude;
         this.myLocation();
       });
     }
@@ -35,6 +39,7 @@ export class MapComponent implements OnInit, AfterViewInit {
   }
 
   myLocation(lat = this.coordinates.latitude, lon = this.coordinates.longitude) {
+    console.log(lat, lon);
     const mapProp = {
       center: new google.maps.LatLng(lat, lon),
       zoom: 15,
@@ -50,8 +55,10 @@ export class MapComponent implements OnInit, AfterViewInit {
         types: ['geocode']
       });
     google.maps.event.addListener(autocomplete, 'place_changed', () => {
-      this.myLocation(autocomplete.getPlace().geometry.location.lat(), autocomplete.getPlace().geometry.location.lng());
+      this.myLocation(
+        autocomplete.getPlace().geometry.location.lat(),
+        autocomplete.getPlace().geometry.location.lng()
+      );
     });
   }
-
 }

@@ -6,7 +6,7 @@ import { FilmModel } from '../models/film-model';
 })
 export class FilmService {
 
-  private filmsStore$: [];
+  private filmsStore$: FilmModel[];
 
   constructor() {
     this.filmsStore$ = JSON.parse(localStorage.getItem('favouritesFilms')) || [];
@@ -16,7 +16,7 @@ export class FilmService {
     return this.filmsStore$;
   }
 
-  deleteFilm(id: number) {
+  deleteFilm(id: string) {
     this.filmsStore$ = this.filmsStore$.filter(({ imdbID }) => imdbID !== id );
     localStorage.setItem('favouritesFilms', JSON.stringify(this.filmsStore$));
   }

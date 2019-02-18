@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, OnDestroy} from '@angular/core';
 import { Router } from '@angular/router';
 import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { HttpService } from '../../services/http.service';
@@ -9,7 +9,9 @@ import { NotifierService } from 'angular-notifier';
   templateUrl: './registration-page.component.html',
   styleUrls: ['./registration-page.component.css']
 })
-export class RegistrationPageComponent {
+export class RegistrationPageComponent implements OnDestroy {
+
+  private subscribes = [];
 
   hidePassword = true;
   hideConfirmPassword = true;
@@ -57,17 +59,28 @@ export class RegistrationPageComponent {
     private router: Router,
     private notifier: NotifierService
   ) {
-    this.userForm.valueChanges.subscribe(field => {
-      if (field.password !== field.confirmPassword) {
-        this.userForm.get('confirmPassword').setErrors({ notSame: true });
-      } else {
-        this.userForm.get('confirmPassword').setErrors(null);
-      }
-    });
+    this.subscribes
+      .push(this.userForm.valueChanges
+        .subscribe(({ password, confirmPassword }) => {
+          if (password !== confirmPassword) {
+            this.userForm
+              .get('confirmPassword')
+              .setErrors({ notSame: true });
+          } else {
+            this.userForm
+              .get('confirmPassword')
+              .setErrors(null);
+          }
+        }
+      )
+    );
+  }
+
+  ngOnDestroy() {
+    this.subscribes.length && this.subscribes.forEach(sub => sub.unsubscribe());
   }
 
   public getErrorMessage(field) {
-    console.log(this.userForm.get(field).errors);
     return this.userForm.get(field).hasError('required') ?
       'You must enter a value' :
       this.userForm.get(field).hasError('firstUpperCaseLetter') ?
@@ -83,15 +96,15 @@ export class RegistrationPageComponent {
   }
 
   submitForm() {
-    this.httpService.registration(this.userForm.value)
+    this.subscribes.push(this.httpService.registration(this.userForm.value)
       .subscribe(
         res => {
-          this.notifier.notify('success', res.message);
+          console.log(res);
+          this.router.navigate(['/login']);
         },
         err => {
           this.notifier.notify('error', err.error);
-        });
-    this.router.navigate(['/login']);
+        }));
   }
 
 }

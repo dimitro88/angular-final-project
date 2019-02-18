@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import { HttpService } from '../../../../services/http.service';
 import {debounceTime, distinctUntilChanged, filter, switchMap} from 'rxjs/internal/operators';
 import { FormControl } from '@angular/forms';
@@ -10,7 +10,10 @@ import { FilmService } from '../../../../services/film.service';
   templateUrl: './films.component.html',
   styleUrls: ['./films.component.css']
 })
-export class FilmsComponent implements OnInit {
+export class FilmsComponent implements OnInit, OnDestroy {
+
+  private sub;
+
   public search = new FormControl('');
   public response;
 
@@ -21,19 +24,23 @@ export class FilmsComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.search.valueChanges
+    this.sub = this.search.valueChanges
       .pipe(
         filter(text => text.length > 2),
         debounceTime(1000),
         distinctUntilChanged(),
         switchMap(filmName => this.httpService.getFilmsAutocomplete(filmName))
       )
-      .subscribe(res => {
-          this.response = res.Search;
+      .subscribe(({ Search }) => {
+          this.response = Search;
         },
         err => {
-          console.log(err);
+          console.error(err);
         });
+  }
+
+  ngOnDestroy() {
+    this.sub && this.sub.unsubscribe();
   }
 
   getInfoDetails(id) {
@@ -55,8 +62,7 @@ export class FilmsComponent implements OnInit {
     this._films.deleteFilm(imdbID);
   }
 
-  addToFavourites(item) {
-    const { Poster, Title, Runtime, Genre, Type, imdbID } = item;
+  addToFavourites({ Poster, Title, Runtime, Genre, Type, imdbID }) {
     this._films.addFilm({
       Poster,
       Title,
