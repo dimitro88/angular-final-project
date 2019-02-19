@@ -1,6 +1,7 @@
 /// <reference path="../../../../../../node_modules/@types/googlemaps/index.d.ts"/>
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { NotifierService } from 'angular-notifier';
 declare let google: any;
 
 @Component({
@@ -11,6 +12,7 @@ declare let google: any;
 export class MapComponent implements OnInit, AfterViewInit {
 
   map: google.maps.Map;
+  geocoder = new google.maps.Geocoder();
 
   @ViewChild('gmap') gmapElement: any;
   @ViewChild('activeInput') activeInput: any;
@@ -19,17 +21,24 @@ export class MapComponent implements OnInit, AfterViewInit {
     latitude: 0,
     longitude: 0
   };
+  private markerCoordinates = {
+    latitude: 0,
+    longitude: 0
+  };
+
+  private marker;
 
   public search = new FormControl('');
+  public favouritePlaces = [];
 
-  constructor() { }
+  constructor(private notifier: NotifierService) { }
 
   ngOnInit() {
     if (window.navigator.geolocation) {
       window.navigator.geolocation.getCurrentPosition(({ coords : { latitude, longitude }}) => {
         this.coordinates.latitude = latitude;
         this.coordinates.longitude = longitude;
-        this.myLocation();
+        this.setLocation();
       });
     }
   }
@@ -38,7 +47,7 @@ export class MapComponent implements OnInit, AfterViewInit {
     this.getPlaceAutocomplete();
   }
 
-  myLocation(lat = this.coordinates.latitude, lon = this.coordinates.longitude) {
+  setLocation(lat = this.coordinates.latitude, lon = this.coordinates.longitude) {
     console.log(lat, lon);
     const mapProp = {
       center: new google.maps.LatLng(lat, lon),
@@ -46,6 +55,11 @@ export class MapComponent implements OnInit, AfterViewInit {
       mapTypeId: google.maps.MapTypeId.ROADMAP
     };
     this.map = new google.maps.Map(this.gmapElement.nativeElement, mapProp);
+    this.map.addListener('click', ({ latLng }) => {
+      this.setMarker(latLng.lat(), latLng.lng());
+      this.markerCoordinates.latitude = latLng.lat();
+      this.markerCoordinates.longitude = latLng.lng();
+    });
   }
 
   private getPlaceAutocomplete() {
@@ -55,10 +69,41 @@ export class MapComponent implements OnInit, AfterViewInit {
         types: ['geocode']
       });
     google.maps.event.addListener(autocomplete, 'place_changed', () => {
-      this.myLocation(
+      this.setLocation(
         autocomplete.getPlace().geometry.location.lat(),
         autocomplete.getPlace().geometry.location.lng()
       );
     });
   }
+
+  setMarker(lat, lon) {
+    this.marker && this.marker.setMap && this.marker.setMap(null);
+    this.marker = new google.maps.Marker({
+      position: new google.maps.LatLng(lat, lon),
+      map: this.map
+    });
+  }
+
+  addToFavouritePlaces() {
+    const { longitude, latitude } = this.markerCoordinates;
+    this.getLocationOfMarker(latitude, longitude);
+  }
+
+  getLocationOfMarker(lat, lon) {
+    this.geocoder.geocode({'location': new google.maps.LatLng(lat, lon)}, results => {
+      if (results[0]) {
+        const { formatted_address } = results[0];
+        this.favouritePlaces.every(({ address }) => address !== formatted_address) &&
+        this.favouritePlaces.push({
+          address: formatted_address,
+          longitude: lon,
+          latitude: lat
+        });
+        console.log(this.favouritePlaces);
+      } else {
+        this.notifier.notify('error', 'Click on map to set marker before adding place to favourite');
+      }
+    });
+  }
+
 }

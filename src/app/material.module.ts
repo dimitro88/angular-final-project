@@ -13,6 +13,7 @@ import {
 import {MatCardModule} from '@angular/material/card';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import {MatListModule} from '@angular/material/list';
 
 @NgModule({
   imports: [
@@ -26,7 +27,8 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
     MatIconModule,
     MatFormFieldModule,
     MatCardModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    MatListModule
   ],
   exports: [
     MatButtonModule,
@@ -39,7 +41,8 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
     MatIconModule,
     MatFormFieldModule,
     MatCardModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    MatListModule
   ]
 })
 
