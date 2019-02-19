@@ -106,4 +106,9 @@ export class MapComponent implements OnInit, AfterViewInit {
     });
   }
 
+  getFavouritePlace(lat, lon) {
+    this.setLocation(lat, lon);
+    this.setMarker(lat, lon);
+  }
+
 }
