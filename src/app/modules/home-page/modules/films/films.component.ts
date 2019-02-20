@@ -1,6 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import { HttpService } from '../../../../services/http.service';
-import {debounceTime, distinctUntilChanged, filter, switchMap} from 'rxjs/internal/operators';
+import {debounceTime, distinctUntilChanged, filter, switchMap } from 'rxjs/internal/operators';
+import { forkJoin } from 'rxjs';
 import { FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { FilmService } from '../../../../services/film.service';
@@ -12,7 +13,7 @@ import { FilmService } from '../../../../services/film.service';
 })
 export class FilmsComponent implements OnInit, OnDestroy {
 
-  private sub;
+  private subscribes = [];
 
   public search = new FormControl('');
   public response;
@@ -24,7 +25,7 @@ export class FilmsComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this.sub = this.search.valueChanges
+    this.subscribes.push(this.search.valueChanges
       .pipe(
         filter(text => text.length > 2),
         debounceTime(1000),
@@ -32,15 +33,19 @@ export class FilmsComponent implements OnInit, OnDestroy {
         switchMap(filmName => this.httpService.getFilmsAutocomplete(filmName))
       )
       .subscribe(({ Search }) => {
+          forkJoin(Search.map(({ imdbID }) => this.httpService.getFilmById(imdbID)))
+            .subscribe(filmsDetailInfo => {
+              Search.forEach(film => film.Genre = filmsDetailInfo.find(({ imdbID }) => imdbID === film.imdbID).Genre || 'unknown');
+          });
           this.response = Search;
         },
         err => {
           console.error(err);
-        });
+        }));
   }
 
   ngOnDestroy() {
-    this.sub && this.sub.unsubscribe();
+    this.subscribes.length && this.subscribes.forEach(sub => sub.unsubscribe());
   }
 
   getInfoDetails(id) {

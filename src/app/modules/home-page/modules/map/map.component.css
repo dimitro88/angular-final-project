@@ -74,3 +74,22 @@
   width: 5%;
   height: 6.5vh;
 }
+
+.favourite-list-item {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+
+.favourite-list-item-icon {
+  width: 10%;
+}
+
+.favourite-list-item-text {
+  width: 90%;
+}
+
+.favourite-list-item-text h3 {
+  font-size: 15px;
+  font-family: "Times New Roman", sans-serif;
+}

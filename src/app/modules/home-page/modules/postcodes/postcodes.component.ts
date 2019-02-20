@@ -17,6 +17,7 @@ export class PostcodesComponent implements OnInit, OnDestroy {
   @ViewChild('gmap') gmapElement: any;
   @ViewChild('activeInput') activeInput: any;
 
+  private marker;
   private subscribes = [];
   private coordinates = {
     latitude: 0,
@@ -76,9 +77,18 @@ export class PostcodesComponent implements OnInit, OnDestroy {
       this.subscribes.push(this.httpService.lookupPostcode(postcode)
         .subscribe( ({result : { latitude, longitude }}) => {
             this.myLocation(latitude, longitude);
+            this.setMarker(latitude, longitude);
           },
           err => console.error(err)));
     }
+  }
+
+  setMarker(lat, lon) {
+    this.marker && this.marker.setMap && this.marker.setMap(null);
+    this.marker = new google.maps.Marker({
+      position: new google.maps.LatLng(lat, lon),
+      map: this.map
+    });
   }
 
 }

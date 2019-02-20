@@ -35,9 +35,13 @@
       </div>
       <div class="favourite-place-list-container">
         <mat-list class="favourite-place-list">
-          <mat-list-item *ngFor="let item of favouritePlaces" (click)="getFavouritePlace(item.latitude, item.longitude)">
-            <mat-icon mat-list-icon>done</mat-icon>
-            <h3 mat-line>{{item.address}}</h3>
+          <mat-list-item *ngFor="let item of favouritePlaces" (click)="getFavouritePlace(item.latitude, item.longitude)" class="favourite-list-item">
+            <div class="favourite-list-item-icon" (click)="deleteFavouritePlace(item.address);$event.stopPropogation()">
+              <mat-icon mat-list-icon>remove</mat-icon>
+            </div>
+            <div class="favourite-list-item-text">
+              <h3 mat-line>{{item.address}}</h3>
+            </div>
           </mat-list-item>
         </mat-list>
       </div>

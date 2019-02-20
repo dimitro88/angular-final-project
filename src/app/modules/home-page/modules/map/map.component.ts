@@ -111,4 +111,8 @@ export class MapComponent implements OnInit, AfterViewInit {
     this.setMarker(lat, lon);
   }
 
+  deleteFavouritePlace(address) {
+    this.favouritePlaces = this.favouritePlaces.filter(place => place.address !== address);
+  }
+
 }
