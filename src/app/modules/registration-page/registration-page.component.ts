@@ -99,7 +99,6 @@ export class RegistrationPageComponent implements OnDestroy {
     this.subscribes.push(this.httpService.registration(this.userForm.value)
       .subscribe(
         res => {
-          console.log(res);
           this.router.navigate(['/login']);
         },
         err => {

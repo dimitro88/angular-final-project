@@ -17,10 +17,6 @@ export class MapComponent implements OnInit, AfterViewInit {
   @ViewChild('gmap') gmapElement: any;
   @ViewChild('activeInput') activeInput: any;
 
-  private coordinates = {
-    latitude: 0,
-    longitude: 0
-  };
   private markerCoordinates = {
     latitude: 0,
     longitude: 0
@@ -36,9 +32,11 @@ export class MapComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     if (window.navigator.geolocation) {
       window.navigator.geolocation.getCurrentPosition(({ coords : { latitude, longitude }}) => {
-        this.coordinates.latitude = latitude;
-        this.coordinates.longitude = longitude;
-        this.setLocation();
+        this.setLocation(latitude, longitude);
+        this.markerCoordinates = {
+          latitude,
+          longitude
+        };
       });
     }
   }
@@ -47,14 +45,14 @@ export class MapComponent implements OnInit, AfterViewInit {
     this.getPlaceAutocomplete();
   }
 
-  setLocation(lat = this.coordinates.latitude, lon = this.coordinates.longitude) {
-    console.log(lat, lon);
+  setLocation(lat = 49.8257032, lon = 24.012346299999997) {
     const mapProp = {
       center: new google.maps.LatLng(lat, lon),
       zoom: 15,
       mapTypeId: google.maps.MapTypeId.ROADMAP
     };
     this.map = new google.maps.Map(this.gmapElement.nativeElement, mapProp);
+    this.setMarker(lat, lon);
     this.map.addListener('click', ({ latLng }) => {
       this.setMarker(latLng.lat(), latLng.lng());
       this.markerCoordinates.latitude = latLng.lat();
@@ -69,10 +67,13 @@ export class MapComponent implements OnInit, AfterViewInit {
         types: ['geocode']
       });
     google.maps.event.addListener(autocomplete, 'place_changed', () => {
-      this.setLocation(
-        autocomplete.getPlace().geometry.location.lat(),
-        autocomplete.getPlace().geometry.location.lng()
-      );
+      const latitude = autocomplete.getPlace().geometry.location.lat();
+      const longitude = autocomplete.getPlace().geometry.location.lng();
+      this.setLocation(latitude, longitude);
+      this.markerCoordinates = {
+        latitude,
+        longitude
+      };
     });
   }
 
@@ -99,7 +100,6 @@ export class MapComponent implements OnInit, AfterViewInit {
           longitude: lon,
           latitude: lat
         });
-        console.log(this.favouritePlaces);
       } else {
         this.notifier.notify('error', 'Click on map to set marker before adding place to favourite');
       }
@@ -108,7 +108,6 @@ export class MapComponent implements OnInit, AfterViewInit {
 
   getFavouritePlace(lat, lon) {
     this.setLocation(lat, lon);
-    this.setMarker(lat, lon);
   }
 
   deleteFavouritePlace(address) {

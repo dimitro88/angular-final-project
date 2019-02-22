@@ -50,7 +50,6 @@ export class LoginPageComponent implements OnDestroy {
   submitForm() {
     this.sub = this.httpService.login(this.userForm.value)
       .subscribe(({ token }) => {
-          console.log(`login token received : ${token}`);
           localStorage.setItem('token', token);
           this.router.navigate(['/home']);
         },

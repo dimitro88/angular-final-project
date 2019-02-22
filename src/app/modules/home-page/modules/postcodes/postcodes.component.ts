@@ -63,7 +63,6 @@ export class PostcodesComponent implements OnInit, OnDestroy {
   }
 
   myLocation(lat = this.coordinates.latitude, lon = this.coordinates.longitude) {
-    console.log(lat, lon);
     const mapProp = {
       center: new google.maps.LatLng(lat, lon),
       zoom: 15,

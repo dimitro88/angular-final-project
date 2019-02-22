@@ -33,10 +33,10 @@ export class FilmsComponent implements OnInit, OnDestroy {
         switchMap(filmName => this.httpService.getFilmsAutocomplete(filmName))
       )
       .subscribe(({ Search }) => {
-          forkJoin(Search.map(({ imdbID }) => this.httpService.getFilmById(imdbID)))
+          this.subscribes.push(forkJoin(Search.map(({ imdbID }) => this.httpService.getFilmById(imdbID)))
             .subscribe(filmsDetailInfo => {
-              Search.forEach(film => film.Genre = filmsDetailInfo.find(({ imdbID }) => imdbID === film.imdbID).Genre || 'unknown');
-          });
+              Search.forEach(film => film.Genre = filmsDetailInfo.find(({ imdbID }) => imdbID === film.imdbID)['Genre'] || 'unknown');
+          }));
           this.response = Search;
         },
         err => {
@@ -55,7 +55,6 @@ export class FilmsComponent implements OnInit, OnDestroy {
   isFavourite(item) {
     let flag = false;
     this._films.getListOfFilms().forEach(({ imdbID }) => {
-      console.log();
       if (imdbID === item.imdbID) {
         flag = true;
       }
