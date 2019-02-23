@@ -90,24 +90,20 @@ export class MapComponent implements OnInit, AfterViewInit {
     this.getLocationOfMarker(latitude, longitude);
   }
 
-  getLocationOfMarker(lat, lon) {
-    this.geocoder.geocode({'location': new google.maps.LatLng(lat, lon)}, results => {
+  getLocationOfMarker(latitude, longitude) {
+    this.geocoder.geocode({'location': new google.maps.LatLng(latitude, longitude)}, results => {
       if (results[0]) {
         const { formatted_address } = results[0];
         this.favouritePlaces.every(({ address }) => address !== formatted_address) &&
         this.favouritePlaces.push({
           address: formatted_address,
-          longitude: lon,
-          latitude: lat
+          longitude,
+          latitude
         });
       } else {
         this.notifier.notify('error', 'Click on map to set marker before adding place to favourite');
       }
     });
-  }
-
-  getFavouritePlace(lat, lon) {
-    this.setLocation(lat, lon);
   }
 
   deleteFavouritePlace(address) {
